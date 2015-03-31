@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block subtitle %}Edit Idea{% endblock subtitle %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h2>Edit Idea</h2>
+      <form class="form-horizontal" action="{% url 'idea_update' idea.id %}" method="POST">
+        {% crispy form %}
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-default" href="{% url 'profile' %}">Cancel</a>
+            <a class="btn btn-danger pull-right" href="{% url 'idea_delete' idea.id %}">Delete</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

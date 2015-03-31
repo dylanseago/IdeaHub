@@ -1,12 +1,36 @@
 {% load custom_tags %}
-<div class="thumbnail">
-  <a href="{% url 'idea' idea.id %}">
-    <img src="http://placehold.it/700x450&text=Idea+Thumbnail" alt="Idea Thumbnail">
-
-    <div class="caption">
-      <h3 style="text-overflow: ellipsis;">{{ idea.name }}</h3>
-
-      <p>{{ idea.summary }}</p>
+<div class="thumbnail idea-card">
+  <div class="caption">
+    <h5 class="margin-top-none margin-bottom-none">
+      <a href="{% url 'idea' idea.id %}" class="idea-name">{{ idea.name }}</a>
+    </h5>
+    <p class="idea-category margin-top-none margin-bottom-none">
+      <b>{{ idea.category.name }}</b>
+    </p>
+    <p class="idea-description ellipsis">
+      {{ idea.description|sentences:1 }}
+    </p>
+    <div class="idea-vote-wrapper"
+         data-idea-id="{{ idea.id }}"
+         data-idea-likes="{{ idea.likes }}"
+         data-idea-dislikes="{{ idea.dislikes }}">
+        <div class="progress progress-plain-bg">
+          <div class="idea-likes-percent progress-bar progress-bar-info" style="width: {{ idea.percent_liked }}%;"></div>
+          <div class="idea-dislikes-percent progress-bar progress-bar-danger" style="width: {{ idea.percent_disliked }}%;"></div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-inline pull-left">
+              {% idea_vote_button idea 'like' %}
+              <span class="idea-likes text-info margin-left-sm margin-right-sm">{{ idea.likes }}</span>
+              {% idea_vote_button idea 'dislike' %}
+              <span class="idea-dislikes text-danger margin-left-sm margin-right-sm">{{ idea.dislikes }}</span>
+            </div>
+            {% if request.user == idea.poster or request.user.is_staff %}
+              <a class="btn btn-sm btn-default pull-right" href="{% url 'idea_update' idea.id %}">Edit</a>
+            {% endif %}
+          </div>
+        </div>
     </div>
-  </a>
+  </div>
 </div>

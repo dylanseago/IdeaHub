@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% load crispy_forms_tags %}
+
+{% block subtitle %}Get Started{% endblock subtitle %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-lg-8 col-lg-offset-0">
+      <h4>Registration</h4>
+      {% crispy signup_form %}
+    </div>
+    <div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-0">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">Login</h1>
+        </div>
+        <div class="panel-body">
+          {% crispy login_form %}
+        </div>
+        <div class="panel-footer">
+          <div align='center'>{% link 'signup' 'New user? Sign up!' %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

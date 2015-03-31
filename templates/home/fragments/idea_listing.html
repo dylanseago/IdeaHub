@@ -1,0 +1,82 @@
+<div class="idea-list-wrapper">
+    <div class="idea-list-rows-wrapper">
+        <div class="idea-list-row row">
+          {% for idea in ideas|slice:"12" %}
+            <div class="idea-card-wrapper col-md-4">
+              {% include 'home/fragments/idea_card.html' %}
+            </div>
+            {% if forloop.counter|divisibleby:3 %}
+              </div><div class="idea-list-row row">
+            {% endif %}
+          {% empty %}
+            <div class="col-xs-12">
+              {% if userpage %}
+                <p><i>You haven't posted any ideas yet.</i></p>
+                <a class="btn btn-primary btn-sm" href="{% url 'idea_create' %}">Share Idea</a>
+              {% else %}
+                <p><i>No ideas found.</i></p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+    {% if ideas|length > 12 %}
+      <div class="row item-list-load-wrapper">
+        <div class="col-xs-12 text-center">
+          <button class="btn btn-primary idea-list-load" role="button">Show More
+            <i class="fa fa-lg fa-spinner fa-spin margin-left-sm loading" style="display:none;"></i>
+          </button>
+        </div>
+        <div class="item-list-load-error alert alert-danger col-xs-12 col-md-6 col-md-offset-3 margin-top-md"
+             style="display:none;">
+          An error occurred while loading more ideas.
+        </div>
+      </div>
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var TOTAL_IDEAS = {{ ideas|length }};
+        var IDEA_LIST_FETCH_COUNT = 12;
+        var idea_list_index = IDEA_LIST_FETCH_COUNT;
+        var ideas_api_path = "{% url 'api:ideas' %}";
+        $('button.idea-list-load').click(function() {
+            var button = $(this);
+            button.prop('disabled', true);
+            button.find('.loading').show();
+            // Ensure the request parameters are passed to the ajax call
+            var uri = new URI().path(ideas_api_path).addQuery('render');
+            $.get(uri.resource(), {
+                'start': idea_list_index,
+                'end': idea_list_index + IDEA_LIST_FETCH_COUNT
+            }).done(function (data, status, jqXHR) {
+                var idea_cards = $(data);
+                // Adjust index tracker and hide button if not more ideas
+                idea_list_index += IDEA_LIST_FETCH_COUNT;
+                if (TOTAL_IDEAS <= idea_list_index) {
+                    button.hide();
+                }
+                // Draw the idea cards into the DOM
+                var ideaListWrapper = button.closest('.idea-list-wrapper').find('.idea-list-rows-wrapper');
+                var cardWrapper = ideaListWrapper.find('.idea-card-wrapper').first().clone().empty();
+                var row = ideaListWrapper.find('.idea-list-row').last();
+                $.each(idea_cards, function() {
+                    if (row.children().size() >= 3) {
+                        row = $('<div class="row"></div>');
+                        ideaListWrapper.append(row);
+                    }
+                    var newCardWrapper = cardWrapper.clone();
+                    newCardWrapper.append(this);
+                    row.append(newCardWrapper);
+                });
+
+            }).fail(function (jqXHR, status, error) {
+                button.closest('.item-list-load-wrapper').find('.item-list-load-error').show();
+            }).always(function () {
+                button.find('.loading').hide();
+                button.prop('disabled', false);
+            });
+        });
+    });
+</script>

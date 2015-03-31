@@ -3,6 +3,7 @@ import locale
 from django.core.urlresolvers import reverse
 from django.utils.timesince import timeuntil
 from django.template.defaultfilters import title as format_title, capfirst
+from jumpstart.apps.home.models import Rating
 
 locale.setlocale(locale.LC_ALL, '')
 register = Library()
@@ -104,3 +105,30 @@ def range_filter(value):
     8
     """
     return range(*value) if isinstance(value, tuple) else range(value)
+
+@register.filter(name='sentences')
+def sentences(value, nsentences):
+    """
+    Filter - returns everything in value up to the first period or line break.
+    """
+    if len(value) == 0:
+        return value
+    sentence_count = 0
+    for i in range(len(value)):
+        if sentence_count == nsentences:
+            return value[:i]
+        if value[i] in '.\n':
+            sentence_count += 1
+    return value
+
+
+@register.inclusion_tag("home/fragments/idea_vote_button.html", name="idea_vote_button", takes_context=True)
+def user_liked(context, idea, vote_type):
+    request = context['request']
+    rating = Rating.objects.filter(rater=request.user, idea=idea).first()
+    voted = rating and ((rating.positive and vote_type == 'like') or (not rating.positive and vote_type == 'dislike'))
+    return {
+        'vote_type': vote_type,
+        'voted': voted,
+        'glyphicon_type': 'thumbs-up' if vote_type == 'like' else 'thumbs-down',
+    }

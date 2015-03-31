@@ -35,7 +35,7 @@
     <title>{% block title %}{% block subtitle %}{% endblock subtitle %} - {{ SITE_NAME }}{% endblock title %}</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="{% static "bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="{% static "css/jumpstart.css" %}" rel="stylesheet">
@@ -50,10 +50,19 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery -->
+    <script src='{% static "js/jquery.js" %}'></script>
+
+    <!-- URI plugin -->
+    <script src='{% static "js/URI.js" %}'></script>
+
+    <script src='{% static "js/highcharts.js" %}'></script>
+    <script src='{% static "js/highcharts.exporting.js" %}'></script>
+
     {% block css %}{% endblock css %}
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock body_class %}">
 
   <!-- Navigation -->
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,10 +81,11 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-left">
           {% link 'ideas' nav=True %}
+          {% link 'idea_create' 'Share Idea' nav=True %}
         </ul>
-        <form action="{% url 'search' %}" method="GET" class="navbar-form navbar-left" role="search">
+        <form action="{% url 'ideas' %}" method="GET" class="navbar-form navbar-left" role="search">
           <div class="form-group has-feedback">
-            <input name="q" type="search" class="form-control" placeholder="Name, market, tag..."
+            <input name="query" type="search" class="form-control" placeholder="Search an idea..."
                    {% if search_query %}value="{{ search_query }}"{% endif %}/>
             <i class="glyphicon glyphicon-search form-control-feedback"></i>
           </div>
@@ -92,8 +102,7 @@
             {% link 'logout' nav=True %}
           {% else %}
             {# Unauthenticated user links #}
-            {% link 'signup' 'Sign Up' nav=True %}
-            {% link 'login' nav=True %}
+            {% link 'get_started' nav=True %}
           {% endif %}
         </ul>
       </div>
@@ -124,11 +133,15 @@
   </div>
   <!-- /.container -->
 
-  <!-- jQuery -->
-  <script src='{% static "js/jquery.js" %}'></script>
+  <!-- jQuery plugins -->
+  <script src='{% static "js/jquery.dotdotdot.js" %}'></script>
+  <script src='{% static "js/jquery.cookie.js" %}'></script>
 
   <!-- Bootstrap Core JavaScript -->
   <script src='{% static "js/bootstrap.min.js" %}'></script>
+
+  <!-- Custom JavaScript -->
+  <script src='{% static "js/jumpstart.js" %}'></script>
 
   {% block scripts %}{% endblock scripts %}
   </body>

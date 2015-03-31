@@ -1,70 +1,122 @@
+from crispy_forms.bootstrap import AppendedText, PrependedText
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Div, Field
 from django import forms
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
-from jumpstart.widgets import BSTextInput, BSEmailInput, BSPasswordInput, glyphicon
+from jumpstart import settings
+from jumpstart.utils import glyphicon, field_max_len
 
 
-class SignupForm(forms.ModelForm):
+class LoginForm(AuthenticationForm):
+    """
+    A form that logs a user in
+    """
+    remember_me = forms.BooleanField(
+        label = 'Remember Me',
+        required = False,
+        widget = forms.CheckboxInput
+    )
+
+    def remember_user(self):
+        try:
+            if self.cleaned_data.get('remember_me'):
+                return True
+        except AttributeError:
+            pass
+        return False
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'login'
+        self.helper.label_class = 'sr-only'
+        self.helper.layout = Layout(
+            PrependedText('username', glyphicon('user'), placeholder='Username'),
+            PrependedText('password', glyphicon('lock'), placeholder='Password'),
+            Field('remember_me', css_class='checkbox-inline'),
+            Submit('submit', 'Login'),
+        )
+
+
+class SignupForm(UserCreationForm):
     """
     A form that creates a user, with no privileges, from the given username, email,
     password, first name and last name.
     """
-    error_messages = {
-        'duplicate': "A user with that username or email already exists.",
-        'password_mismatch': "The two password fields didn't match.",
-    }
-
     first_name = forms.CharField(
-        widget=BSTextInput("First Name", hide_label=True), max_length=30, help_text="Required. 30 characters or fewer.")
+        label = 'First Name',
+        max_length = field_max_len(User, 'first_name'),
+        required = True,
+        widget = forms.TextInput,
+    )
 
     last_name = forms.CharField(
-        widget=BSTextInput("Last Name", hide_label=True), max_length=30, help_text="Required. 30 characters or fewer.")
+        label = 'Last Name',
+        max_length = field_max_len(User, 'last_name'),
+        required = True,
+        widget = forms.TextInput,
+    )
 
     email = forms.EmailField(
-        widget=BSEmailInput("Email", hide_label=True, prepended='@'))
+        label = 'Email',
+        max_length = field_max_len(User, 'email'),
+        required = True,
+        widget = forms.EmailInput,
+    )
 
     username = forms.RegexField(
-        widget=BSTextInput("Username", hide_label=True, prepended=glyphicon('user')), max_length=30,
-        regex=r'^[\w.@+-]+$', help_text="Required. 30 characters or fewer. Letters, digits and @.+-_ only.",
-        error_messages={'invalid': "This value may contain only letters, numbers and @.+-_ characters."})
+        label = "Username",
+        max_length = field_max_len(User, 'username'),
+        required = True,
+        regex = r'^[\w.@+-]+$',
+        help_text = "{} characters or fewer. Letters, digits and @/./+/-/_ only.".format(field_max_len(User, 'username')),
+        error_messages = {
+            'invalid': "This value may contain only letters, numbers and @/./+/-/_ characters.",
+        },
+    )
 
     password1 = forms.CharField(
-        widget=BSPasswordInput("Password", hide_label=True, prepended=glyphicon('lock')), min_length=8,
-        help_text="Required. 8 or more characters.")
+        label = "Password",
+        min_length = 8,
+        required = True,
+        widget = forms.PasswordInput,
+        help_text = "8 characters minimum.",
+    )
 
     password2 = forms.CharField(
-        widget=BSPasswordInput("Confirm Password", hide_label=True, prepended=glyphicon('repeat')), min_length=8,
-        help_text="Enter the same password as above, for verification.")
+        label = "Repeat Password",
+        required = True,
+        widget = forms.PasswordInput,
+        help_text = "Enter the same password as above, for verification.",
+    )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'username',)
+        fields = ['first_name', 'last_name', 'email', 'username']
 
-    def clean_username(self):
-        # Since User.username is unique, this check is redundant,
-        # but it sets a nicer error message than the ORM. See #13147.
-        username = self.cleaned_data["username"]
-        try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
-            return username
-        raise forms.ValidationError(
-            self.error_messages['duplicate_username'],
-            code='duplicate_username',
-        )
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
-            )
-        return password2
-
-    def save(self, commit=True, login=True):
-        user = super(SignupForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
+    def save(self, commit=True, auth_after_save=True):
+        user = super(SignupForm, self).save(commit)
+        if commit and auth_after_save:
+            user = authenticate(username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
         return user
+
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'signup'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = Layout(
+            Field('first_name', placeholder='First Name'),
+            Field('last_name', placeholder='Last Name'),
+            Field('email', placeholder='Email'),
+            Field('username', placeholder='Username'),
+            Field('password1', placeholder='Password'),
+            Field('password2', placeholder='Repeat Password'),
+            Submit('submit', 'Sign Up'),
+        )

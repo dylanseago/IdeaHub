@@ -130,10 +130,6 @@ a {
 
 // Forms ======================================================================
 
-label {
-  font-weight: normal;
-}
-
 textarea,
 textarea.form-control,
 input.form-control,
@@ -503,6 +499,12 @@ input[type="checkbox"],
     
     &-danger:last-child.progress-bar:before {
       background-color: lighten(@brand-danger, 25%);
+    }
+  }
+
+  &-plain-bg &-bar:last-child {
+    &:before {
+      background-color: @progress-bar-plain-bg;
     }
   }
 }

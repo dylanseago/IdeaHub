@@ -44,8 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.webdesign',
+    'crispy_forms',
     'jumpstart.apps.home',
-    'jumpstart.apps.search',
     'jumpstart.apps.accounts',
 )
 
@@ -87,6 +87,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -107,5 +109,8 @@ TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'profile'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 2419200 # 4 weeks
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

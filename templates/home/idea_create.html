@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block subtitle %}Share Idea{% endblock subtitle %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h2 class="page-header margin-top-none">Share Idea</h2>
+      <form class="form-horizontal" action="{% url 'idea_create' %}" method="POST">
+        {% crispy form %}
+        <button class="btn btn-primary" type="submit">Share</button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

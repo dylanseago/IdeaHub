@@ -3,72 +3,34 @@
 
 {% block title %}{{ SITE_NAME }}{% endblock title %}
 
-{% block scripts %}
-  <!-- Script to Activate the Carousel -->
-  <script>
-    $('.carousel').carousel({
-      interval: 5000 //changes the speed
-    })
-  </script>
-{% endblock scripts %}
-
 {% block beforecontent %}
   <!-- Carousel -->
-  <div id="myCarousel" class="carousel slide">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-
+  <div id="index-banner" class="carousel">
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
         <div class="fill"
-             style="background-image:url(http://c2.staticflickr.com/6/5513/14370075880_55ab9e55b9_h.jpg);"></div>
+             style="background-image:url(http://blog.teamtreehouse.com/wp-content/uploads/2013/01/blog_business.jpg);"></div>
         <div class="carousel-caption">
-          <h1>Welcome to {{ SITE_NAME }}!</h1>
-          <h4>A place to share your startup ideas.</h4>
+          <h2>Welcome to {{ SITE_NAME }}!</h2>
+          <h5>A place to share your startup ideas.</h5>
 
           <p><a class="btn btn-primary btn-lg" href="{% url 'ideas' %}" role="button">Explore</a></p>
         </div>
       </div>
-      <div class="item">
-        <div class="fill"
-             style="background-image:url(https://s3.amazonaws.com/StartupStockPhotos/20140808_StartupStockPhotos/58.jpg);"></div>
-        <div class="carousel-caption">
-          <h1>Startups</h1>
-
-          <p>Raise money to turn your ideas into reality.</p>
-
-          <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Get Started</a></p>
-        </div>
-      </div>
-      <div class="item">
-        <div class="fill"
-             style="background-image:url(https://dpqe0zkrjo0ak.cloudfront.net/pfil/4954/pict_original.jpg);"></div>
-        <div class="carousel-caption">
-          <h1>Charity</h1>
-
-          <p>Gather support from your community for a greater cause.</p>
-
-          <p><a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Get Started</a></p>
-        </div>
-      </div>
     </div>
-
-    <!-- Controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-      <span class="icon-prev"></span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-      <span class="icon-next"></span>
-    </a>
   </div>
 {% endblock beforecontent %}
 
 {% block content %}
-  <h2>About</h2>
-  {% lorem 2 p %}
+  <h2 class="page-header margin-top-none">About</h2>
+  <p class="lead">
+    Idea Hub the go-to place to share your business ideas with the world. Use our platform to connect with potential
+    collaborators, judge public interest in an idea and explore other peoples creations, all at the tips of your
+    fingers. And it's free!
+  </p>
+  {% include 'home/fragments/category_graph.html' %}
+  <div class="text-center">
+    <a class="btn btn-link" href="{% url 'api:category_graph' %}">View Raw Data</a>
+  </div>
 {% endblock content %}

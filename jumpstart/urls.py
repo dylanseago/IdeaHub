@@ -9,9 +9,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^', include('jumpstart.apps.home.urls')),
-    url(r'^search/', include('jumpstart.apps.search.urls')),
     url(r'^accounts/', include('jumpstart.apps.accounts.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include('jumpstart.apps.api.urls', namespace='api')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
 urlpatterns += staticfiles_urlpatterns()
 

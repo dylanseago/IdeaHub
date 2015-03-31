@@ -1,10 +1,64 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
 
-</body>
-</html>
+{% block subtitle %}{{ idea.name }}{% endblock subtitle %}
+
+{% block scripts %}
+  <script src="{% static 'js/idea_vote.js' %}" type="text/javascript"></script>
+{% endblock scripts %}
+
+{% block content %}
+  <h2 class="page-header margin-top-none">{{ idea.name }}
+    {% if request.user == idea.poster or request.user.is_staff %}
+      <a class="btn btn-default margin-left-md" href="{% url 'idea_update' idea.id %}">Edit</a>
+    {% endif %}
+  </h2>
+
+  <div class="row margin-bottom-md">
+    <div class="col-md-8">
+      {# User and Category #}
+      <h4 class="margin-top-none"><small>by</small>
+        <a href="{% url 'user' idea.poster.id %}" >{{ idea.poster.get_full_name }}</a>
+        <small>in</small>
+        <a href="{% url 'ideas' %}?category={{ idea.category_id }}">{{ idea.category.name }}</a>
+      </h4>
+    </div>
+    <div class="col-md-4">
+      {# Votes #}
+      <div class="idea-vote-wrapper"
+           data-idea-id="{{ idea.id }}"
+           data-idea-likes="{{ idea.likes }}"
+           data-idea-dislikes="{{ idea.dislikes }}">
+          <div class="progress progress-plain-bg">
+            <div class="idea-likes-percent progress-bar progress-bar-info" style="width: {{ idea.percent_liked }}%;"></div>
+            <div class="idea-dislikes-percent progress-bar progress-bar-danger" style="width: {{ idea.percent_disliked }}%;"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-inline">
+                {% idea_vote_button idea 'like' %}
+                <span class="idea-likes text-info margin-left-sm margin-right-sm">{{ idea.likes }}</span>
+                {% idea_vote_button idea 'dislike' %}
+                <span class="idea-dislikes text-danger margin-left-sm margin-right-sm">{{ idea.dislikes }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  {# Description #}
+  <span class="lead">
+    {{ idea.description|linebreaks }}
+  </span>
+
+  {# Tags #}
+  <p><i>
+    {% if idea.tags and idea.tags.strip %}
+      <b>Tags:</b> {{ idea.tags }}
+    {% else %}
+      No Tags
+    {% endif %}
+  </i></p>
+{% endblock content %}
