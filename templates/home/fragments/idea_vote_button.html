@@ -1,3 +1,7 @@
-<button class="btn btn-default btn-sm idea-vote-button idea-vote-button-{{ vote_type }} {% if voted %}active{% endif %}" type="button">
+<button class="btn btn-default btn-sm idea-vote-button idea-vote-button-{{ vote_type }} {% if voted %}active{% endif %}"
+        type="button"
+        {% if not request.user.is_authenticated %}
+        disabled="disabled"
+        {% endif %}>
   <span class="glyphicon glyphicon-{{ glyphicon_type }}" aria-hidden="true"></span>
 </button>

@@ -1,7 +1,7 @@
 {# Global variables #}
 {% load custom_tags %}
 {% load static %}
-{% with SITE_NAME="Jump Start" %}
+{% with SITE_NAME="Idea Hub" %}
   <!DOCTYPE html>
   <html lang="en">
 
@@ -38,7 +38,7 @@
     <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="{% static "css/jumpstart.css" %}" rel="stylesheet">
+    <link href="{% static "css/ideahub.css" %}" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
@@ -75,7 +75,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'index' %}"><span class="text-primary">Jump</span> Start</a>
+        <a class="navbar-brand" href="{% url 'index' %}"><span class="text-primary">Idea</span> Hub</a>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -141,7 +141,7 @@
   <script src='{% static "js/bootstrap.min.js" %}'></script>
 
   <!-- Custom JavaScript -->
-  <script src='{% static "js/jumpstart.js" %}'></script>
+  <script src='{% static "js/ideahub.js" %}'></script>
 
   {% block scripts %}{% endblock scripts %}
   </body>

@@ -10,7 +10,7 @@
 
 {% block content %}
   <h2 class="page-header margin-top-none">{{ idea.name }}
-    {% if request.user == idea.poster or request.user.is_staff %}
+    {% if request.user == idea.creator or request.user.is_staff %}
       <a class="btn btn-default margin-left-md" href="{% url 'idea_update' idea.id %}">Edit</a>
     {% endif %}
   </h2>
@@ -19,7 +19,7 @@
     <div class="col-md-8">
       {# User and Category #}
       <h4 class="margin-top-none"><small>by</small>
-        <a href="{% url 'user' idea.poster.id %}" >{{ idea.poster.get_full_name }}</a>
+        <a href="{% url 'user' idea.creator.id %}" >{{ idea.creator.get_full_name }}</a>
         <small>in</small>
         <a href="{% url 'ideas' %}?category={{ idea.category_id }}">{{ idea.category.name }}</a>
       </h4>

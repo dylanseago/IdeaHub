@@ -1,0 +1,95 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    margin-top: 64px;
+}
+
+body > .container {
+    padding-top: 15px;
+}
+
+.margin-none { margin: 0; }
+.margin-sm { margin: 0.5em; }
+.margin-md { margin: 1em; }
+.margin-lg { margin: 2em; }
+.margin-top-none { margin-top: 0; }
+.margin-top-sm { margin-top: 0.5em; }
+.margin-top-md { margin-top: 1em; }
+.margin-top-lg { margin-top: 2em; }
+.margin-right-none { margin-right: 0; }
+.margin-right-sm { margin-right: 0.5em; }
+.margin-right-md { margin-right: 1em; }
+.margin-right-lg { margin-right: 2em; }
+.margin-bottom-none { margin-bottom: 0; }
+.margin-bottom-sm { margin-bottom: 0.5em; }
+.margin-bottom-md { margin-bottom: 1em; }
+.margin-bottom-lg { margin-bottom: 2em; }
+.margin-left-none { margin-left: 0; }
+.margin-left-sm { margin-left: 0.5em; }
+.margin-left-md { margin-left: 1em; }
+.margin-left-lg { margin-left: 2em; }
+
+.img-hover:hover {
+    opacity: 0.8;
+}
+
+.btn:focus.idea-vote-button {
+    outline: none;
+}
+
+/* Home Page Carousel */
+
+.carousel {
+    height: 50%;
+}
+
+.carousel .item,
+.carousel .item.active,
+.carousel .carousel-inner {
+    height: 100%;
+}
+
+.carousel .fill {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+#index-banner .carousel-caption {
+    bottom: 0px;
+    padding-bottom: 10px;
+}
+
+.progress {
+	margin-bottom: 8px;
+}
+
+/* Footer Styles */
+
+footer {
+    margin: 50px 0;
+}
+
+.navbar-brand {
+    color: inherit !important;
+}
+
+.asteriskField {
+    display: none;
+}
+
+.idea-card .idea-description {
+    display: block;
+    max-height: 10em;
+}
+
+.idea-card .idea-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    width: inherit;
+    overflow: hidden;
+}
