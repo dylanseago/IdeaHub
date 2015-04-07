@@ -10,7 +10,7 @@
 
 {% block content %}
   <h2 class="page-header margin-top-none">{{ idea.name }}
-    {% if request.user == idea.creator or request.user.is_staff %}
+    {% if user == idea.creator or user.is_staff %}
       <a class="btn btn-default margin-left-md" href="{% url 'idea_update' idea.id %}">Edit</a>
     {% endif %}
   </h2>

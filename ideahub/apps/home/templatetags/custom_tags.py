@@ -131,4 +131,5 @@ def user_liked(context, idea, vote_type):
         'vote_type': vote_type,
         'voted': voted,
         'glyphicon_type': 'thumbs-up' if vote_type == 'like' else 'thumbs-down',
+        'user': request.user
     }

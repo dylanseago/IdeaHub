@@ -26,7 +26,7 @@
               {% idea_vote_button idea 'dislike' %}
               <span class="idea-dislikes text-danger margin-left-sm margin-right-sm">{{ idea.dislikes }}</span>
             </div>
-            {% if request.user == idea.poster or request.user.is_staff %}
+            {% if user == idea.poster or user.is_staff %}
               <a class="btn btn-sm btn-default pull-right" href="{% url 'idea_update' idea.id %}">Edit</a>
             {% endif %}
           </div>
