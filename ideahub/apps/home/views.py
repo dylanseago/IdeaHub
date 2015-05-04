@@ -17,6 +17,7 @@ class LoginRequiredMixin(object):
     def as_view(cls):
         return login_required(super(LoginRequiredMixin, cls).as_view())
 
+
 class ModelOwnershipMixin(SingleObjectMixin):
     model_owner_field = None
 
@@ -34,6 +35,7 @@ class ModelOwnershipMixin(SingleObjectMixin):
             if getattr(obj, self.model_owner_field) != request.user:
                 return redirect(obj)
         return super(ModelOwnershipMixin, self).dispatch(request, *args, **kwargs)
+
 
 def index(request):
     return render(request, 'home/index.html', {
@@ -54,7 +56,7 @@ class IdeaCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # Set the poster before the form is saved
-        form.instance.poster = self.request.user
+        form.instance.creator = self.request.user
         return super(IdeaCreate, self).form_valid(form)
 
 
@@ -62,12 +64,14 @@ class IdeaUpdate(LoginRequiredMixin, ModelOwnershipMixin, UpdateView):
     model = Idea
     form_class = IdeaForm
     template_name = 'home/idea_update.html'
+    model_owner_field = 'creator'
 
 
 class IdeaDelete(LoginRequiredMixin, ModelOwnershipMixin, DeleteView):
-     model = Idea
-     http_method_names = ['post']
-     success_url = reverse_lazy('profile')
+    model = Idea
+    success_url = reverse_lazy('profile')
+    model_owner_field = 'creator'
+
 
 @login_required(login_url='get_started')
 @require_POST
@@ -95,6 +99,7 @@ def ideas(request):
         'categories': categories,
         'query': query,
     })
+
 
 def idea_cards(request):
     ideas = ideas_query()

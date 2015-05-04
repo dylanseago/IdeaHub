@@ -7,13 +7,19 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
       <h2>Edit Idea</h2>
+
       <form class="form-horizontal" action="{% url 'idea_update' idea.id %}" method="POST">
         {% crispy form %}
-        <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Save</button>
-            <a class="btn btn-default" href="{% url 'profile' %}">Cancel</a>
-            <a class="btn btn-danger pull-right" href="{% url 'idea_delete' idea.id %}">Delete</a>
+        <div class="form-actions pull-left">
+          <button class="btn btn-primary" type="submit">Save</button>
+          <a class="btn btn-default" href="{% url 'profile' %}">Cancel</a>
+
         </div>
+      </form>
+
+      <form action="{% url 'idea_delete' idea.id %}" class="pull-right" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger pull-right">Delete</button>
       </form>
     </div>
   </div>

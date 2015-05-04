@@ -51,7 +51,7 @@
                 'start': idea_list_index,
                 'end': idea_list_index + IDEA_LIST_FETCH_COUNT
             }).done(function (data, status, jqXHR) {
-                var idea_cards = $(data);
+                var idea_cards = $(data).filter(".idea-card");
                 // Adjust index tracker and hide button if not more ideas
                 idea_list_index += IDEA_LIST_FETCH_COUNT;
                 if (TOTAL_IDEAS <= idea_list_index) {
